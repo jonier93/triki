@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[0][0]);
                 array[0][0] = imprimir;
                 casilla1.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[0][1]);
                 array[0][1] = imprimir;
                 casilla2.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[0][2]);
                 array[0][2] = imprimir;
                 casilla3.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[1][0]);
                 array[1][0] = imprimir;
                 casilla4.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[1][1]);
                 array[1][1] = imprimir;
                 casilla5.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[1][2]);
                 array[1][2] = imprimir;
                 casilla6.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -91,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[2][0]);
                 array[2][0] = imprimir;
                 casilla7.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -100,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[2][1]);
                 array[2][1] = imprimir;
                 casilla8.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
 
@@ -109,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[2][2]);
                 array[2][2] = imprimir;
                 casilla9.setText(imprimir);
+                revisarGanador(imprimir);
             }
         });
     }
@@ -151,8 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String validar_casilla(String celda){
         if(celda.equals("")){
-            String imprimir = turnoJugador();
-            return imprimir;
+            return turnoJugador();
         }
         else {
             Toast.makeText(MainActivity.this, "No es posible realizar esta jugada intente de nuevo", Toast.LENGTH_SHORT).show();
@@ -160,4 +168,86 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void revisarGanador(String simbolo){
+        if(revisarCuadrado(simbolo)){
+           txtJugador.setText("El ganador es el jugador" + jugador);
+           inicializar_array();
+           inicializar_botones();
+           jugador=1;
+        }
+    }
+
+    private void inicializar_botones() {
+        casilla1.setText("");
+        casilla2.setText("");
+        casilla3.setText("");
+        casilla4.setText("");
+        casilla5.setText("");
+        casilla6.setText("");
+        casilla7.setText("");
+        casilla8.setText("");
+        casilla9.setText("");
+    }
+
+
+    private Boolean revisarCuadrado(String simbolo){
+        if(revisarFilas(simbolo)) return true;
+        if(revisarColumnas(simbolo)) return true;
+        return revisarDiagonales(simbolo);
+    }
+
+    private boolean revisarFilas(String simbolo) {
+        for(int i=0; i< array[0].length;i++){
+            if(revisarFila(i,simbolo))return true;
+        }
+        return false;
+    }
+
+    private boolean revisarFila(int fila, String simbolo) {
+        for(int i=0;i< array.length;i++){
+            if (!array[i][fila].equals(simbolo)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean revisarColumnas(String simbolo){
+        for(int i=0; i< array.length;i++){
+            if(revisarColumna(i,simbolo))return true;
+        }
+        return false;
+    }
+
+    private Boolean revisarDiagonales(String simbolo){
+        if(revisarDiagonalPrincipal(simbolo)) return true;
+        return revisarDiagonalSecundaria(simbolo);
+    }
+
+    private Boolean revisarDiagonalSecundaria(String simbolo) {
+        for(int i=0;i< array.length;i++){
+            if (!array[i][array.length-i-1].equals(simbolo)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean revisarDiagonalPrincipal(String simbolo){
+        for(int i=0;i< array.length;i++){
+            if (!array[i][i].equals(simbolo)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean revisarColumna(Integer fila, String simbolo){
+        for(int i=0;i< array[fila].length;i++){
+            if (!array[fila][i].equals(simbolo)) {
+               return false; 
+            }
+        }
+        return true;
+    }
 }
