@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtJugador;
     private int jugador;
     private String [] [] array;
+    private int cont;
 
 
     @Override
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[0][0]);
                 array[0][0] = imprimir;
                 casilla1.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[0][1]);
                 array[0][1] = imprimir;
                 casilla2.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[0][2]);
                 array[0][2] = imprimir;
                 casilla3.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[1][0]);
                 array[1][0] = imprimir;
                 casilla4.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -73,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[1][1]);
                 array[1][1] = imprimir;
                 casilla5.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -82,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[1][2]);
                 array[1][2] = imprimir;
                 casilla6.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -91,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[2][0]);
                 array[2][0] = imprimir;
                 casilla7.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -100,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[2][1]);
                 array[2][1] = imprimir;
                 casilla8.setText(imprimir);
+                validar_filas_columnas();
             }
         });
 
@@ -109,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 String imprimir = validar_casilla(array[2][2]);
                 array[2][2] = imprimir;
                 casilla9.setText(imprimir);
+                validar_filas_columnas();
             }
         });
     }
@@ -126,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         txtJugador = (TextView) findViewById(R.id.txtJugador);
         array = new String[3][3];
         jugador = 1;
+        cont = 0;
+        txtJugador.setText("Turno jugador 1");
     }
 
     private void inicializar_array (){
@@ -152,6 +164,13 @@ public class MainActivity extends AppCompatActivity {
     private String validar_casilla(String celda){
         if(celda.equals("")){
             String imprimir = turnoJugador();
+            cont += 1;
+            if(cont == 9) {
+                limpiar_botones();
+                inicializar_array();
+                Toast.makeText(MainActivity.this, String.valueOf(cont), Toast.LENGTH_LONG).show();
+                imprimir="";
+            }
             return imprimir;
         }
         else {
@@ -160,4 +179,59 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void validar_filas_columnas() {
+        boolean validation = true;
+        for (int n=0; n<2; n++) {
+            if (validation) {
+                for (int i = 0; i < array.length; i++) {
+                    int suma = 0;
+                    for (int j = 0; j < array[0].length; j++) {
+                        int fila;
+                        int colum;
+                        if (n == 0) {
+                            fila = i;
+                            colum = j;
+                        } else {
+                            fila = j;
+                            colum = i;
+                        }
+                        if (array[fila][colum] == "X") {
+                            suma = suma + 1;
+                        } else if (array[fila][colum] == "O") {
+                            suma = suma - 1;
+                        }
+                    }
+                    if (suma == 3) {
+                        ganador("Ganó el jugador 1");
+                        limpiar_botones();
+                        validation = false;
+                        break;
+                    } else if (suma == -3) {
+                        ganador("Ganó el jugador 2");
+                        limpiar_botones();
+                        validation = false;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void limpiar_botones() {
+        casilla1.setText("");
+        casilla2.setText("");
+        casilla3.setText("");
+        casilla4.setText("");
+        casilla5.setText("");
+        casilla6.setText("");
+        casilla7.setText("");
+        casilla8.setText("");
+        casilla9.setText("");
+    }
+
+    private void ganador(String ganador) {
+        Toast.makeText(MainActivity.this, ganador, Toast.LENGTH_LONG).show();
+        inicializar();
+        inicializar_array();
+    }
 }
